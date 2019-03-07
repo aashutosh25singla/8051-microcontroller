@@ -1,0 +1,193 @@
+A51 MACRO ASSEMBLER  LCD                                                                  11/25/2017 23:58:18 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.5.0
+OBJECT MODULE PLACED IN .\Objects\lcd.obj
+ASSEMBLER INVOKED BY: C:\Keil_8051\C51\BIN\A51.EXE lcd.s SET(SMALL) DEBUG PRINT(.\Listings\lcd.lst) OBJECT(.\Objects\lcd
+                      .obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+
+                       2             
+
+                       3     ;   RS     RW     E       D0 -  D7
+
+                       4     ;   P2.0   P2.1   P2.2   P1.0 - P1.7
+
+                       5     
+
+                       6     
+
+  00A0                 7     RS EQU P2.0
+
+  00A1                 8     RW EQU P2.1
+
+  00A2                 9     E  EQU P2.2
+
+                      10     
+
+                      11     ;LCD INITIALIZATION
+
+                      12     
+
+0000 759038           13      MOV P1, #38H   ;2 lines and 5x7 matrix
+
+0003 1152             14     ACALL send_command
+
+                      15     
+
+0005 75900E           16     MOV P1, #0EH  ;display on cursor blink
+
+0008 1152             17     ACALL send_command
+
+                      18     
+
+000A 759001           19     MOV P1, #01H    ;clear display screen
+
+000D 1152             20     ACALL  send_command
+
+                      21     
+
+                      22     
+
+000F 759080           23     here:   MOV P1, #80H    ; FORCE CURSOR TO 1ST LINE
+
+0012 1152             24             ACALL  send_command
+
+                      25                ;PRINTING A CHARACTER
+
+                      26     
+
+0014 759045           27             MOV P1, #'E'
+
+0017 115D             28             ACALL send_data
+
+0019 75904D           29             MOV P1, #'M'
+
+001C 115D             30             ACALL send_data
+
+001E 759042           31             MOV P1, #'B'
+
+0021 115D             32             ACALL send_data
+
+0023 759045           33             MOV P1, #'E'
+
+0026 115D             34             ACALL send_data
+
+0028 759044           35             MOV P1, #'D'
+
+002B 115D             36             ACALL send_data
+
+002D 759044           37             MOV P1, #'D'
+
+0030 115D             38             ACALL send_data
+
+0032 759045           39             MOV P1, #'E'
+
+0035 115D             40             ACALL send_data
+
+0037 759044           41             MOV P1, #'D'
+
+003A 115D             42             ACALL send_data 
+
+                      43             
+
+003C 7590C0           44             MOV P1, #0C0H   ; FORCE CURSOR TO 2ND LINE
+
+003F 1152             45             ACALL  send_command
+
+                      46             
+
+0041 75904C           47             MOV P1, #'L'
+
+0044 115D             48             ACALL send_data
+
+0046 759041           49             MOV P1, #'A'
+
+0049 115D             50             ACALL send_data
+
+004B 759042           51             MOV P1, #'B'
+
+004E 115D             52             ACALL send_data 
+
+                      53             
+
+0050 80BD             54             SJMP here
+
+                      55     
+
+0052 C2A1             56     send_command:   CLR RW
+
+0054 C2A0             57                                     CLR RS
+
+A51 MACRO ASSEMBLER  LCD                                                                  11/25/2017 23:58:18 PAGE     2
+
+0056 D2A2             58                                     SETB E
+
+0058 1168             59                                     ACALL DELAY
+
+005A C2A2             60                                     CLR E
+
+005C 22               61                                     RET
+
+                      62     
+
+005D C2A1             63     send_data:      CLR RW
+
+005F D2A0             64                                     SETB RS
+
+0061 D2A2             65                                     SETB E
+
+0063 1168             66                                     ACALL DELAY
+
+0065 C2A2             67                                     CLR E
+
+0067 22               68                                     RET
+
+                      69     
+
+0068 780A             70     DELAY : MOV R0, #10
+
+006A 79FF             71     Here2 : MOV R1, #255
+
+006C D9FE             72     Here1 : DJNZ R1, here1
+
+006E D8FA             73                        DJNZ R0, here2
+
+                      74               
+
+0070 22               75                       RET
+
+                      76     
+
+                      77     
+
+                      78     END
+
+A51 MACRO ASSEMBLER  LCD                                                                  11/25/2017 23:58:18 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY. . . . . . .  C ADDR   0068H   A   
+E. . . . . . . . .  B ADDR   00A0H.2 A   
+HERE . . . . . . .  C ADDR   000FH   A   
+HERE1. . . . . . .  C ADDR   006CH   A   
+HERE2. . . . . . .  C ADDR   006AH   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+RS . . . . . . . .  B ADDR   00A0H.0 A   
+RW . . . . . . . .  B ADDR   00A0H.1 A   
+SEND_COMMAND . . .  C ADDR   0052H   A   
+SEND_DATA. . . . .  C ADDR   005DH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
